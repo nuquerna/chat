@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url("./style.css");
+    </style>
+    <title>Chat</title>
+</head>
+
+<body>
+    <section>
+        <a href="./registration.html">REGISTRATION</a>
+    </section>
+    <section>
+        <legend>SIGN IN</legend>
+        <form id="signForm">
+            <input name="email" placeholder="E-mail" type="text" required>
+            <input name="password" placeholder="Password" type="password" required>
+            <input type="submit" value="Sign In">
+        </form>
+        <span id="signError"></span>
+    </section>
+</body>
+<script src="./index.js"></script>
+<script>
+    signForm.onsubmit = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(signForm);
+        formData.append('room_id', roomId)
+
+        let response = await fetch('http://104.248.82.179/api/auth/issue-token', {
+            method: 'POST',
+            body: formData
+        });
+
+        await checkResponse(response);
+    };
+</script>
+</html>

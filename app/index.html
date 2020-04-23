@@ -12,23 +12,18 @@
 
 <body>
     <section>
-        <form id="reg-form">
-            <div>REGISTRATION</div>
-            <div>
-                <input id="signup-name" placeholder="Your Name" type="text" required>
-            </div>
-            <div>
-                <input id="signup-email" placeholder="E-mail" type="email" required>
-            </div>
-            <div>
-                <input id="signup-password" placeholder="Password" type="password" required>
-            </div>
-            <div>
-                <input type="submit" value="Register"></input>
-            </div>
-        </form>
+        <a href="./registration.html">REGISTRATION</a>
+        <a href="./signin.html">SIGN IN</a>
     </section>
 </body>
-<script src="./index.js"></script>
+
+<script>
+    const user = sessionStorage.getItem('currentUser');
+    const token = sessionStorage.getItem('token');
+
+    if (user && token) {
+        window.location.href = './chat.html';
+    }
+</script>
 
 </html>
