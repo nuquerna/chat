@@ -1,0 +1,97 @@
+<div class="ms-box column" *ngIf="currentAnchor && currentAnchor.entityType">
+  <div class="ms-box ms-main-color ms-mb-1" id="srchlnmnslct" style="color: white;padding-top:.2em;padding-bottom:.25em;align-items:center;">
+    <mat-icon style="padding-right:1.5em;padding-left:.5em;">search</mat-icon>
+    <mat-form-field class="f-3" [floatLabel]="'auto'">
+      <mat-select [(value)]="currentAnchor">
+        <mat-option *ngFor="let anchor of anchorDimensions;let i=index;" (click)="setSelectedAnchor(anchor)" id="mssld_{{ i }}"
+          [value]="anchor" [disabled]="!userService.hasAccessToAnchor(anchor)">{{anchor.displayName}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="f-2" [floatLabel]="'auto'" *ngIf="isComparisonMode">
+      <mat-select placeholder="Select an entity type" [(value)]="currentComparisonAnchor">
+        <mat-option *ngFor="let anchor of anchorComparisonDimensions;let i=index;" (click)="setSelectedComparisonAnchor(anchor)"
+          id="mssld_cr_{{ i }}" [value]="anchor" [disabled]="!userService.hasAccessToAnchor(anchor)">{{anchor.displayName}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div [class.f-7]="!isComparisonMode" [class.f-9]="isComparisonMode" class="ms-box column" (keyup)="onKey($event)"
+      [ngSwitch]="currentAnchor.entityType">
+      <!-- COMPANY -->
+      <ng-template [ngSwitchCase]="et.Company">
+        <div class="ms-box" [formGroup]="searchForm.company.group">
+          <mat-form-field class="f-3">
+            <input matInput placeholder="{{ getCompanyPlaceholder() }}" formControlName="searchText">
+            <mat-error>
+              <ms-error-message [text]="searchForm.company.searchText" [require]="searchForm.company.requiredMessage"
+                [minlength]="searchForm.company.minlenghtMessage"></ms-error-message>
+            </mat-error>
+          </mat-form-field>
+          <mat-radio-group class="f-1 ms-self-center" formControlName="searchType">
+            <mat-radio-button id="r7" value="Name" name="type">{{ searchForm.company.textLabel }}</mat-radio-button>
+            <mat-radio-button id="r8" value="Ticker" name="type">{{ searchForm.company.tickerLabel }}</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </ng-template>
+      <!-- ATTORNEY -->
+      <ng-template [ngSwitchCase]="et.Attorney">
+        <div class="ms-box" [formGroup]="searchForm.attorney.group">
+          <mat-form-field class="f-1" [floatLabel]="'auto'">
+            <mat-label>{{ searchForm.attorney.textLabel }}</mat-label>
+            <input id="af" matInput placeholder="{{ searchForm.attorney.textPlaceholder }}" formControlName="searchText">
+            <mat-error>
+              <ms-error-message [text]="searchForm.attorney.searchText" [require]="searchForm.attorney.requiredMessage"
+                [minlength]="searchForm.attorney.minlenghtMessage"></ms-error-message>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="f-1" [floatLabel]="'auto'">
+            <mat-label>{{ searchForm.attorney.lawFirmLabel }}</mat-label>
+            <input id="as" matInput placeholder="{{ searchForm.attorney.lawFirmPlaceholder }}" formControlName="optional">
+          </mat-form-field>
+        </div>
+      </ng-template>
+      <!-- COMPANY LOCATION -->
+      <ng-template [ngSwitchCase]="et.HQLocation">
+        <div class="ms-box">
+          <mat-form-field class="f-1">
+            <input matInput placeholder="{{ searchForm.companyLocation.textPlaceholder }}" [formControl]="searchForm.companyLocation.control">
+            <mat-error>
+              <ms-error-message [text]="searchForm.companyLocation.control" [require]="searchForm.companyLocation.requiredMessage"></ms-error-message>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </ng-template>
+      <!-- COURT -->
+      <ng-template [ngSwitchCase]="et.Court">
+        <div class="ms-box">
+          <mat-form-field cvlass="f-1">
+            <input matInput placeholder="{{ searchForm.court.textPlaceholder }}" [formControl]="searchForm.court.control">
+            <mat-error>
+              <ms-error-message [text]="searchForm.court.control" [require]="searchForm.court.requiredMessage"></ms-error-message>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </ng-template>
+      <!-- INDUSTRY -->
+      <ng-template [ngSwitchCase]="et.Industry">
+        <div class="ms-box">
+          <mat-form-field class="f-1">
+            <input matInput placeholder="{{ searchForm.industry.textPlaceholder }}" [formControl]="searchForm.industry.control">
+            <mat-error>
+              <ms-error-message [text]="searchForm.industry.control" [require]="searchForm.industry.requiredMessage"></ms-error-message>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </ng-template>
+    </div>
+
+    <div class="f-1"><button *ngIf="currentAnchor.isTaxonomy" (click)="showAllAreas()" mat-icon-button>
+        <mat-icon>device_hub</mat-icon>
+      </button>
+    </div>
+    <div class="f-1">
+      <button mat-raised-button id="srchbtn" [disabled]="!isFormValid() || !isSearchBtnShow" (click)="onSearch()">Search</button>
+    </div>
+  </div>
+</div>
+
